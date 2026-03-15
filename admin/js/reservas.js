@@ -62,7 +62,7 @@ function renderizarTabla(reservas) {
                 <td>
                     <div class="acciones-btn-group">
                         <a href="editar_reserva.html?id=${reserva.id_reserva}" class="btn btn-custom btn-sm">Editar</a>
-                        <button class="btn btn-custom btn-sm" onclick="cancelarReserva(${reserva.id_reserva})">Cancelar</button>
+                        <button class="btn btn-custom btn-sm" onclick="cancelarReserva(${reserva.id})">Cancelar</button>
                     </div>
                 </td>
             </tr>
