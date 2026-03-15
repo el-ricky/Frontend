@@ -1,12 +1,13 @@
 // editarReserva.js
 
-const API_BASE  = 'https://backend-salones.vercel.app/api';
+const API_BASE = 'https://backend-salones.vercel.app/api';
 const urlParams = new URLSearchParams(window.location.search);
 const reservaId = urlParams.get('id');
 
 // Datos originales de la reserva (para comparar si la fecha cambió)
-let fechaOriginal   = '';
-let idSalon         = null;
+let fechaOriginal = '';
+let idSalon = null;
+let idServicio = null;
 let hayModificacion = false;
 
 // Inicialización 
@@ -60,7 +61,7 @@ async function cargarDatosReserva() {
     }
     if (!response.ok) throw new Error(`Error ${response.status}`);
 
-    const data    = await response.json();
+    const data = await response.json();
     const reserva = Array.isArray(data) ? data[0] : data;
 
     if (!reserva) {
@@ -71,16 +72,18 @@ async function cargarDatosReserva() {
 
     // Guardar datos originales
     fechaOriginal = (reserva.fecha || '').split('T')[0];
-    idSalon       = reserva.id_salon || reserva.id_sala;
+    idSalon = reserva.id_salon || reserva.id_sala;
+    idServicio = reserva.id_servicio || 0;
+
 
     // Rellenar campos
     document.getElementById('nombre_sala_titulo').textContent =
         `Editando reserva en ${reserva.nombre_sala || 'la sala'}`;
 
-    setVal('nombre_sala',    reserva.nombre_sala   || 'Sin nombre');
+    setVal('nombre_sala', reserva.nombre_sala || 'Sin nombre');
     setVal('capacidad_sala', `${reserva.capacidad_sala || 'N/A'} personas`);
-    setVal('hora_inicio',    formatearHora(reserva.hora_inicio));
-    setVal('hora_fin',       formatearHora(reserva.hora_fin));
+    setVal('hora_inicio', formatearHora(reserva.hora_inicio));
+    setVal('hora_fin', formatearHora(reserva.hora_fin));
     setVal('nombre_servicio', reserva.nombre_servicio || 'Sin servicio adicional');
 
     const total = reserva.total_pagar ? parseFloat(reserva.total_pagar).toFixed(2) : '0.00';
@@ -96,8 +99,8 @@ async function cargarDatosReserva() {
 //  Verificar disponibilidad al cambiar fecha 
 async function verificarDisponibilidad() {
     const nuevaFecha = document.getElementById('fecha').value;
-    const btn        = document.getElementById('btnGuardar');
-    const status     = document.getElementById('statusDisponibilidad');
+    const btn = document.getElementById('btnGuardar');
+    const status = document.getElementById('statusDisponibilidad');
 
     // Si la fecha no cambió, deshabilitar botón guardar
     if (nuevaFecha === fechaOriginal) {
@@ -121,16 +124,16 @@ async function verificarDisponibilidad() {
 
     try {
         const horaInicio = document.getElementById('hora_inicio').value;
-        const horaFin    = document.getElementById('hora_fin').value;
+        const horaFin = document.getElementById('hora_fin').value;
 
         const res = await fetch(`${API_BASE}/reservas/check-disponibilidad/${reservaId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                id_salon:    parseInt(idSalon),
-                fecha:       nuevaFecha,
+                id_salon: parseInt(idSalon),
+                fecha: nuevaFecha,
                 hora_inicio: horaInicio,
-                hora_fin:    horaFin
+                hora_fin: horaFin
             }),
             credentials: 'include'
         });
@@ -139,12 +142,12 @@ async function verificarDisponibilidad() {
 
         if (ocupada) {
             status.innerHTML = '<span class="badge bg-danger">Horario Ocupado — elige otra fecha</span>';
-            btn.disabled     = true;
-            hayModificacion  = false;
+            btn.disabled = true;
+            hayModificacion = false;
         } else {
             status.innerHTML = '<span class="badge bg-success">Fecha Disponible ✓</span>';
-            btn.disabled     = false;
-            hayModificacion  = true;
+            btn.disabled = false;
+            hayModificacion = true;
         }
     } catch (e) {
         console.error('Error al verificar disponibilidad:', e);
@@ -158,7 +161,7 @@ document.getElementById('editarReservaForm').addEventListener('submit', async (e
     e.preventDefault();
 
     const nuevaFecha = document.getElementById('fecha').value;
-    const btn        = document.getElementById('btnGuardar');
+    const btn = document.getElementById('btnGuardar');
 
     // Validar mínimo 3 días de anticipación antes de guardar
     const hoySubmit = new Date();
@@ -173,14 +176,21 @@ document.getElementById('editarReservaForm').addEventListener('submit', async (e
         return;
     }
 
-    btn.disabled     = true;
-    btn.textContent  = 'Guardando...';
+    btn.disabled = true;
+    btn.textContent = 'Guardando...';
 
     try {
         const response = await fetch(`${API_BASE}/reservas/${reservaId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fecha: nuevaFecha }),
+            body: JSON.stringify({
+                fecha: nuevaFecha,
+                id_cliente: parseInt(localStorage.getItem('id')),
+                id_salon: parseInt(idSalon),
+                hora_inicio: document.getElementById('hora_inicio').value,
+                hora_fin: document.getElementById('hora_fin').value,
+                id_servicio: idServicio
+            }),
             credentials: 'include'
         });
 
@@ -198,7 +208,7 @@ document.getElementById('editarReservaForm').addEventListener('submit', async (e
     } catch (error) {
         console.error('Error al guardar cambios:', error);
         mostrarMensaje(error.message, 'danger');
-        btn.disabled    = false;
+        btn.disabled = false;
         btn.textContent = 'Guardar Cambios';
     }
 });
@@ -223,15 +233,15 @@ window.confirmarLogout = function () {
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' }
         })
-        .then(() => {
-            localStorage.removeItem('user');
-            localStorage.removeItem('id');
-            window.location.href = 'login_new.html';
-        })
-        .catch(() => {
-            localStorage.clear();
-            window.location.href = 'login_new.html';
-        });
+            .then(() => {
+                localStorage.removeItem('user');
+                localStorage.removeItem('id');
+                window.location.href = 'login_new.html';
+            })
+            .catch(() => {
+                localStorage.clear();
+                window.location.href = 'login_new.html';
+            });
     }
 };
 
