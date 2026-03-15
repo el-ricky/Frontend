@@ -46,6 +46,7 @@ async function obtenerReservas() {
         if (!response.ok) throw new Error('Error al obtener datos');
 
         const data = await response.json();
+        console.log('Datos recibidos:', data);
         renderizarTabla(data.reservas);
         document.getElementById('next-page').disabled = (paginaActual >= data.totalPages);
         document.getElementById('current-page').innerText = `Página ${paginaActual} de ${data.totalPages}`;
