@@ -1,9 +1,5 @@
-// admin/js/logout.js
-document.addEventListener('DOMContentLoaded', function() {
-
-    const btnLogout = document.getElementById('btnLogout');
-
-    async function cerrarSesion() {
+document.addEventListener('click', async function(e) {
+    if (e.target && e.target.id === 'btnLogout') {
         const confirmacion = confirm('¿Estás seguro de que deseas cerrar sesión?');
         if (!confirmacion) return;
 
@@ -17,11 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Error al llamar al endpoint de logout:', error);
         } finally {
             localStorage.clear();
-            window.location.replace('../index.html'); // ← con ../
+            window.location.replace('../index.html');
         }
-    }
-
-    if (btnLogout) {
-        btnLogout.addEventListener('click', cerrarSesion);
     }
 });
