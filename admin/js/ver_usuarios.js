@@ -100,9 +100,7 @@ function aplicarFiltros() {
     // Filtro por nombre (busca en nombre, aPaterno o aMaterno)
     if (nombre) {
         filtrados = filtrados.filter(u =>
-            (u.nombre   || '').toLowerCase().includes(nombre) ||
-            (u.aPaterno || '').toLowerCase().includes(nombre) ||
-            (u.aMaterno || '').toLowerCase().includes(nombre)
+            (u.nombre   || '').toLowerCase().includes(nombre)
         );
     }
 
