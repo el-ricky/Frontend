@@ -61,7 +61,7 @@ loginForm.addEventListener('submit', async (e) => {
         }
     } catch (error) {
         console.error('Error:', error);
-        showAlert('Error de conexi��n con el servidor. Revisa tu internet.');
+        showAlert('Error de conexion con el servidor. Revisa tu internet.');
     } finally {
         btnIngresar.disabled = false;
         btnText.textContent = 'Ingresar';
