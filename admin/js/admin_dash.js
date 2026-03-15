@@ -29,6 +29,7 @@ async function cargarReservas(page = 1) {
             credentials: 'include' 
         });
         const data = await response.json();
+        console.log('Datos recibidos:', data);
         if (!data.reservas || data.reservas.length === 0) {
             tbody.innerHTML = '<tr><td colspan="8" class="text-center">No hay reservas para hoy o fechas futuras.</td></tr>';
             actualizarControlesPaginacion(0);
