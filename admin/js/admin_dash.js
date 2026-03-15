@@ -23,7 +23,7 @@ async function cargarReservas(page = 1) {
     try {
         tbody.innerHTML = '<tr><td colspan="8" class="text-center">Cargando...</td></tr>';
         const hoy = new Date().toISOString().split('T')[0];
-        const response = await fetch(`https://backend-salones.vercel.app/api/reservas?page=${page}&limit=${limitePorPagina}&sort=DESC&fecha=${hoy}`, {
+        const response = await fetch(`https://backend-salones.vercel.app/api/reservas?page=${page}&limit=${limitePorPagina}&sort=ASC&fecha=${hoy}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include' 
