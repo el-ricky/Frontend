@@ -53,7 +53,7 @@ async function cargarSalones() {
         }
     } catch (e) { 
         console.error("Error cargando el salón", e); 
-        document.getElementById('nombre_sala_titulo').textContent = "Error al cargar datos de la sala";
+        if (img) img.src = salon.imagen || 'https://via.placeholder.com/400x200?text=Sin+Imagen';
     }
 }
 
