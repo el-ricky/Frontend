@@ -170,10 +170,7 @@ function renderizarDetalles(reserva) {
     if (divBotones) {
         if (esCancelada) {
             // Solo el botón Regresar
-            divBotones.innerHTML = `
-                <a href="misreservas.html" class="btn btn-custom w-100">
-                    <i data-feather="arrow-left"></i> Regresar
-                </a>`;
+            divBotones.innerHTML = '';
         } else if (esPagada) {
             divBotones.innerHTML = `
                 <button class="btn btn-custom w-100" disabled>Confirmar Reserva</button>
