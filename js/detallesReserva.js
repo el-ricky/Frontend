@@ -235,22 +235,3 @@ window.cancelarReserva = async function () {
     }
 };
 
-// Logout 
-window.confirmarLogout = function () {
-    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-        fetch(`${API_URL}/logout`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' }
-        })
-        .then(() => {
-            localStorage.removeItem('user');
-            localStorage.removeItem('id');
-            window.location.href = 'login_new.html';
-        })
-        .catch(() => {
-            localStorage.clear();
-            window.location.href = 'login_new.html';
-        });
-    }
-};
