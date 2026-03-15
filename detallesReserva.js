@@ -1,3 +1,4 @@
+//detallesReserva.js
 // Configuración de la API
 const API_URL = 'https://backend-salones.vercel.app/api';
 

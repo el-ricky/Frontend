@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resumen de Reserva - Tenex Reservas</title>
+    <title>Detalles de Reserva - Tenex Reservas</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -50,6 +50,14 @@
 
             <!-- Contenedor principal de la reserva (oculto inicialmente) -->
             <div id="contenedorReserva" class="d-none">
+
+                <!-- Botón Regresar arriba a la izquierda -->
+                <div class="mb-3">
+                    <a href="misreservas.html" class="btn btn-custom">
+                        <i data-feather="arrow-left"></i> Regresar
+                    </a>
+                </div>
+
                 <div class="form-containerPerfil">
                     <div class="row">
                         <!-- Columna izquierda: Imagen y datos básicos -->
@@ -127,9 +135,9 @@
                                     Cancelar
                                 </button>
 
-                                <a href="misreservas.html" class="btn btn-custom">
-                                    <i data-feather="arrow-left"></i> Regresar
-                                </a>
+                                <button id="btnEditar" class="btn btn-custom">
+                                    Editar
+                                </button>
                             </div>
                         </div>
                     </div>

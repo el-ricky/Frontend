@@ -1,3 +1,5 @@
+//misreservas.js
+
 // Configuración de la API
 const API_URL = 'https://backend-salones.vercel.app/api';
 
@@ -9,6 +11,10 @@ const tablaReservas = document.getElementById('tablaReservas');
 
 // Contador para numerar las reservas
 let contadorReservas = 1;
+
+// Almacén de todas las reservas y estado del filtro
+let todasLasReservas = [];
+let mostrandoCanceladas = false;
 
 // Verificar autenticación y cargar reservas al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
@@ -51,7 +57,7 @@ async function verificarAutenticacion() {
         if (tablaBody) {
             tablaBody.innerHTML = `
                 <tr>
-                    <td colspan="5" class="text-center py-4">
+                    <td colspan="6" class="text-center py-4">
                         <div class="alert alert-danger">
                             Error al verificar autenticación. Intente más tarde.
                             <br>
@@ -105,7 +111,7 @@ async function cargarReservas() {
         if (tablaBody) {
             tablaBody.innerHTML = `
                 <tr>
-                    <td colspan="5" class="text-center py-4">
+                    <td colspan="6" class="text-center py-4">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Cargando reservas...</span>
                         </div>
@@ -150,7 +156,10 @@ async function cargarReservas() {
         if (reservasArray.length === 0) {
             mostrarSinReservas();
         } else {
-            renderizarReservas(reservasArray);
+            // Ordenar de más reciente a más antiguo
+            reservasArray.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            todasLasReservas = reservasArray;
+            filtrarYRenderizar();
         }
 
     } catch (error) {
@@ -159,7 +168,7 @@ async function cargarReservas() {
         if (tablaBody) {
             tablaBody.innerHTML = `
                 <tr>
-                    <td colspan="5" class="text-center py-5">
+                    <td colspan="6" class="text-center py-5">
                         <div class="alert alert-danger">
                             Error al cargar tus reservas. Intente más tarde.
                             <br>
@@ -173,6 +182,28 @@ async function cargarReservas() {
                 </tr>
             `;
         }
+    }
+}
+
+// ── Toggle mostrar/ocultar canceladas ─────────────────────────────────────────
+window.toggleCanceladas = function() {
+    mostrandoCanceladas = !mostrandoCanceladas;
+    const btn = document.getElementById('btnVerCanceladas');
+    if (btn) {
+        btn.textContent = mostrandoCanceladas ? 'Ocultar canceladas' : 'Ver canceladas';
+    }
+    filtrarYRenderizar();
+};
+
+function filtrarYRenderizar() {
+    if (mostrandoCanceladas) {
+        renderizarReservas(todasLasReservas);
+    } else {
+        const activas = todasLasReservas.filter(r => {
+            const estado = String(r.estado_pago || '').toLowerCase();
+            return !['cancelada', 'cancelado', '3'].includes(estado);
+        });
+        renderizarReservas(activas);
     }
 }
 
@@ -192,35 +223,17 @@ function getBadgeClass(estado) {
         case 'pagado':
         case 'confirmada':
         case '1':
-            return 'bg-success';         // Verde
+            return 'bg-success';
         case 'cancelada':
         case 'cancelado':
         case '3':
-            return 'bg-danger';          // Rojo
+            return 'bg-danger';
         case 'pendiente':
         case '2':
         default:
-            return 'bg-warning';         // Amarillo
+            return 'bg-warning';
     }
 }
-
-function formatearFecha(fechaStr) {
-    if (!fechaStr) return 'Fecha no disponible';
-    
-    try {
-        // Tomar solo la parte de fecha (antes de la 'T' si existe)
-        const soloFecha = fechaStr.split('T')[0];
-        const [año, mes, dia] = soloFecha.split('-');
-        
-        if (!año || !mes || !dia) return fechaStr;
-        
-        return `${dia}/${mes}/${año}`;
-    } catch (e) {
-        return fechaStr;
-    }
-}
-
-
 
 function renderizarReservas(reservas) {
     if (!tablaBody) return;
@@ -229,12 +242,15 @@ function renderizarReservas(reservas) {
     if (sinReservasDiv) sinReservasDiv.classList.add('d-none');
     
     if (reservas.length === 0) {
-        mostrarSinReservas();
+        tablaBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="text-center py-4 text-muted">
+                    No hay reservas activas para mostrar.
+                </td>
+            </tr>
+        `;
         return;
     }
-
-    // Ordenar de más reciente a más antiguo
-    reservas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
     
     contadorReservas = 1;
     let html = '';
@@ -244,18 +260,24 @@ function renderizarReservas(reservas) {
         const [año, mes, dia] = soloFecha.split('-');
         const fecha = (dia && mes && año) ? `${dia}/${mes}/${año}` : 'Fecha no disponible';
 
-        const estado     = reserva.estado_pago || 'pendiente';
-        const badgeClass = getBadgeClass(estado);
-        const nombreSala = reserva.nombre_salon || reserva.nombre_sala || 'Sala sin nombre';
+        const estado      = reserva.estado_pago || 'pendiente';
+        const badgeClass  = getBadgeClass(estado);
+        const nombreSala  = reserva.nombre_salon || reserva.nombre_sala || 'Sala sin nombre';
+        const estadoLower = String(estado).toLowerCase();
 
-        // Deshabilitar botón si ya está cancelada
-        const estaCancelada = ['cancelada', 'cancelado', '3'].includes(String(estado).toLowerCase());
-        const btnEliminar = estaCancelada
-            ? `<button class="btn btn-custom" disabled>Eliminado</button>`
+        // Si está cancelada, ambos botones se deshabilitan
+        const estaCancelada = ['cancelada', 'cancelado', '3'].includes(estadoLower);
+
+        const btnCancelar = estaCancelada
+            ? `<button class="btn btn-custom" disabled>Cancelado</button>`
             : `<button class="btn btn-custom"
                        onclick="cancelarReserva(${reserva.id}, this)">
-                   Eliminar
+                   Cancelar
                </button>`;
+
+        const btnConfirmar = estaCancelada
+            ? `<button class="btn btn-custom" disabled>Confirmar</button>`
+            : `<button class="btn btn-custom" disabled>Confirmar</button>`;
         
         html += `
             <tr id="fila-reserva-${reserva.id}">
@@ -271,7 +293,8 @@ function renderizarReservas(reservas) {
                     <div class="acciones-reserva">
                         <a href="detallesReserva.html?id=${reserva.id}" 
                            class="btn btn-custom">Detalles</a>
-                        ${btnEliminar}
+                        ${btnConfirmar}
+                        ${btnCancelar}
                     </div>
                 </td>
             </tr>
@@ -283,21 +306,15 @@ function renderizarReservas(reservas) {
     tablaBody.innerHTML = html;
 }
 
-
-
-
-
-
-// ── Cancelar: cambia el badge a rojo sin eliminar la fila ─────────────────────
+// Cancelar: cambia el badge a rojo sin eliminar la fila 
 window.cancelarReserva = async function(reservaId, btnOrigen) {
     if (!reservaId) {
         mostrarMensaje('ID de reserva no válido', 'danger');
         return;
     }
     
-    if (!confirm('¿Estás seguro de que quieres eliminar esta reserva?')) return;
+    if (!confirm('¿Estás seguro de que quieres cancelar esta reserva?')) return;
 
-    // Deshabilitar botón mientras procesa
     if (btnOrigen) {
         btnOrigen.disabled = true;
         btnOrigen.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span>Cancelando...`;
@@ -317,7 +334,7 @@ window.cancelarReserva = async function(reservaId, btnOrigen) {
             throw new Error(errorData.error || errorData.msg || 'Error al cancelar la reserva');
         }
 
-        // Actualizar el badge a rojo sin eliminar la fila
+        // Actualizar el badge a rojo
         const fila = document.getElementById(`fila-reserva-${reservaId}`);
         if (fila) {
             const badge = fila.querySelector('.badge');
@@ -325,11 +342,14 @@ window.cancelarReserva = async function(reservaId, btnOrigen) {
                 badge.className = 'badge bg-danger';
                 badge.textContent = 'cancelado';
             }
-            // Deshabilitar el botón Eliminar ya que la reserva está cancelada
+            // Deshabilitar ambos botones
             if (btnOrigen) {
                 btnOrigen.disabled = true;
-                btnOrigen.innerHTML = 'Eliminado';
+                btnOrigen.innerHTML = 'Cancelado';
             }
+            // Deshabilitar también el botón Confirmar de esa fila
+            const btns = fila.querySelectorAll('button');
+            btns.forEach(btn => { btn.disabled = true; });
         }
 
         mostrarMensaje('Reserva cancelada exitosamente.', 'success');
@@ -338,10 +358,9 @@ window.cancelarReserva = async function(reservaId, btnOrigen) {
         console.error('Error al cancelar reserva:', error);
         mostrarMensaje('Error al cancelar la reserva. Intente nuevamente.', 'danger');
 
-        // Restaurar botón si falla
         if (btnOrigen) {
             btnOrigen.disabled = false;
-            btnOrigen.innerHTML = 'Eliminar';
+            btnOrigen.innerHTML = 'Cancelar';
         }
     }
 };
