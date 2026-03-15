@@ -235,25 +235,7 @@ window.confirmarCancelar = function () {
     }
 };
 
-// Logout
-window.confirmarLogout = function () {
-    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-        fetch(`${API_BASE}/logout`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' }
-        })
-            .then(() => {
-                localStorage.removeItem('user');
-                localStorage.removeItem('id');
-                window.location.href = 'login_new.html';
-            })
-            .catch(() => {
-                localStorage.clear();
-                window.location.href = 'login_new.html';
-            });
-    }
-};
+
 
 // Helpers 
 function setVal(id, valor) {
