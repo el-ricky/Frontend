@@ -132,7 +132,7 @@ async function cancelarReserva(id) {
 async function cargarSalonesFiltro() {
     const select = document.getElementById('filter-salon');
     try {
-        const res = await fetch('`https://backend-salones.vercel.app/api/salones');
+        const res = await fetch('https://backend-salones.vercel.app/api/salones');
         const salones = await res.json();
         
         salones.forEach(salon => {
