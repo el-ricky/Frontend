@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function cargarListaReservas() {
     try {
         const res = await fetch('https://backend-salones.vercel.app/api/reservas', { credentials: 'include' });
-        const reservas = await res.json();
+        const data = await res.json();
+        const reservas = data.reservas;
         const select = document.getElementById('seleccionar_reserva');
         
         reservas.forEach(r => {
