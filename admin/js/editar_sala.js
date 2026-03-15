@@ -11,7 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function cargarSalas() {
         try {
-            const res = await fetch(`${API_URL}all`);
+            const res = await fetch(`${API_URL}all`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
             const salas = await res.json();
             
             selector.innerHTML = '<option value="">-- Seleccione una sala --</option>';
