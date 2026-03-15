@@ -1,6 +1,6 @@
 const API_URL = "https://backend-salones.vercel.app/api";
 
-// ─── Utilidades ───────────────────────────────────────────────────────────────
+// Utilidades 
 
 // El login guarda el usuario en localStorage como "user", NO hay JWT token.
 // La autenticación viaja en una cookie httpOnly que el navegador envía automáticamente.
@@ -18,7 +18,7 @@ function mostrarMensaje(tipo, texto) {
         </div>`;
 }
 
-// ─── Cargar datos del cliente al entrar a la página ───────────────────────────
+// Cargar datos del cliente al entrar a la página 
 
 async function cargarPerfil() {
     const user = getUser();
@@ -69,7 +69,7 @@ async function cargarPerfil() {
     }
 }
 
-// ─── Guardar cambios del perfil ───────────────────────────────────────────────
+//  Guardar cambios del perfil 
 
 async function guardarCambios(e) {
     e.preventDefault();
@@ -111,7 +111,7 @@ async function guardarCambios(e) {
     }
 }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
+// Init 
 
     document.addEventListener("DOMContentLoaded", () => {
         cargarPerfil();
