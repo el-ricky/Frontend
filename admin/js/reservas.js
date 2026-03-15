@@ -55,13 +55,13 @@ function renderizarTabla(reservas) {
                 <td><span class="badge ${badgeClass}">${reserva.estado_pago}</span></td>
                 <td>${reserva.hora_inicio}</td>
                 <td>${reserva.hora_fin}</td>
-                <td>${reserva.nombreCompleto}</td>
+                <td>${reserva.nombre_completo}</td>
                 <td>${reserva.email_cliente}</td>
                 <td>${reserva.nombre_servicio || 'No'}</td>
                 <td><strong>$${parseFloat(reserva.total_pagar).toLocaleString('es-MX', {minimumFractionDigits: 2})}</strong></td>
                 <td>
                     <div class="acciones-btn-group">
-                        <a href="editar_reserva.html?id=${reserva.id_reserva}" class="btn btn-custom btn-sm">Editar</a>
+                        <a href="editar_reserva.html?id=${reserva.id}" class="btn btn-custom btn-sm">Editar</a>
                         <button class="btn btn-custom btn-sm" onclick="cancelarReserva(${reserva.id})">Cancelar</button>
                     </div>
                 </td>
