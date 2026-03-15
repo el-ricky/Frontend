@@ -88,6 +88,16 @@ async function cargarDatosReserva() {
 
     const total = reserva.total_pagar ? parseFloat(reserva.total_pagar).toFixed(2) : '0.00';
     setVal('total_pagar_display', `$${total}`);
+    // Cargar imagen de la sala
+    try {
+        const salaRes = await fetch(`${API_BASE}/salones/${idSalon}`);
+        const salaData = await salaRes.json();
+        const imgEl = document.getElementById('imagen_sala');
+        if (imgEl) imgEl.src = salaData.imagen || 'https://via.placeholder.com/400x200?text=Sin+Imagen';
+    } catch {
+        const imgEl = document.getElementById('imagen_sala');
+        if (imgEl) imgEl.src = 'https://via.placeholder.com/400x200?text=Sin+Imagen';
+    }
 
     // Setear la fecha actual en el input (formato yyyy-mm-dd)
     document.getElementById('fecha').value = fechaOriginal;
