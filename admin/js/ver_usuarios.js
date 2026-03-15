@@ -99,7 +99,7 @@ function aplicarFiltros() {
 
     if (nombre) {
         filtrados = filtrados.filter(u =>
-            (u.nombre || '').toLowerCase().startsWith(nombre)
+            (u.nombre || '').toLowerCase().split(' ').some(palabra => palabra.startsWith(nombre))
         );
     }
     if (estado === 'activo') {
