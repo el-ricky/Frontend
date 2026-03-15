@@ -45,10 +45,10 @@ async function obtenerReservas() {
 
         if (!response.ok) throw new Error('Error al obtener datos');
 
-        const reservas = await response.json();
-        renderizarTabla(reservas);
-        document.getElementById('prev-page').disabled = (paginaActual === 1);
-        document.getElementById('next-page').disabled = (reservas.length < limitePorPagina);
+        const data = await response.json();
+        renderizarTabla(data.reservas);
+        document.getElementById('next-page').disabled = (paginaActual >= data.totalPages);
+        document.getElementById('current-page').innerText = `Página ${paginaActual} de ${data.totalPages}`;
 
     } catch (error) {
         console.error('Error:', error);
@@ -126,5 +126,22 @@ async function cancelarReserva(id) {
         }
     } catch (error) {
         alert('Error de conexión.');
+    }
+}
+
+async function cargarSalonesFiltro() {
+    const select = document.getElementById('filter-salon');
+    try {
+        const res = await fetch('`https://backend-salones.vercel.app/api/salones');
+        const salones = await res.json();
+        
+        salones.forEach(salon => {
+            const option = document.createElement('option');
+            option.value = salon.id;
+            option.textContent = salon.nombre;
+            select.appendChild(option);
+        });
+    } catch (err) {
+        console.error("No se pudieron cargar los salones para el filtro");
     }
 }

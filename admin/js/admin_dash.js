@@ -27,7 +27,8 @@ async function cargarReservas() {
             credentials: 'include' 
         });
 
-        const reservas = await response.json();
+        const data = await response.json();
+        const reservas = data.reservas;
 
         // 1. VALIDACIÓN CRUCIAL: Verificar si es un array antes del forEach
         if (!Array.isArray(reservas)) {
