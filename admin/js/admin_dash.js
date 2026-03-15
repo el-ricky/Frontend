@@ -79,26 +79,6 @@ async function cargarReservas() {
     }
 }
 
-
-
-// 3. CERRAR SESIÓN
-
-document.getElementById('btnLogout').addEventListener('click', () => {
-
-    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-
-        localStorage.removeItem('user');
-
-        // Aquí podrías llamar también a una ruta de backend para limpiar la cookie
-
-        window.location.href = 'login.html';
-
-    }
-
-});
-
-
-
 // Ejecutar carga al abrir la página
 
 cargarReservas();
