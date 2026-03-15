@@ -188,10 +188,19 @@ function renderizarDetalles(reserva) {
     }
 
     if (imagenSala) {
-        imagenSala.src = 'img/sala-default.jpg';
-        imagenSala.alt = `Imagen de ${reserva.nombre_sala || 'la sala'}`;
-    }
+    imagenSala.alt = `Imagen de ${reserva.nombre_sala || 'la sala'}`;
+    // Cargar imagen desde el endpoint de salones
+    fetch(`https://backend-salones.vercel.app/api/salones/${reserva.id_sala}`)
+        .then(r => r.json())
+        .then(sala => {
+            imagenSala.src = sala.imagen || 'https://via.placeholder.com/400x200?text=Sin+Imagen';
+        })
+        .catch(() => {
+            imagenSala.src = 'https://via.placeholder.com/400x200?text=Sin+Imagen';
+        });
 }
+}
+
 
 // Cancelar 
 window.cancelarReserva = async function () {
