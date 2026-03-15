@@ -92,15 +92,15 @@ function renderizarUsuarios(usuarios) {
 
 // ─── Filtros ──────────────────────────────────────────────────────────────────
 function aplicarFiltros() {
-    const nombre  = document.getElementById('filtrNombre').value.trim().toLowerCase();
-    const estado  = document.getElementById('filtrEstado').value;
+    const nombre = document.getElementById('filtrNombre').value.trim().toLowerCase();
+    const estado = document.getElementById('filtrEstado').value;
 
     let filtrados = todosLosUsuarios;
 
     // Filtro por nombre (busca en nombre, aPaterno o aMaterno)
     if (nombre) {
         filtrados = filtrados.filter(u =>
-            (u.nombre   || '').toLowerCase().includes(nombre)
+            (u.nombre || '').toLowerCase().includes(nombre)
         );
     }
 
@@ -166,17 +166,13 @@ async function activarUsuario(id) {
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     cargarUsuarios();
-    document.getElementById('btnFiltrar').addEventListener('click', aplicarFiltros);
     document.getElementById('btnLimpiar').addEventListener('click', limpiarFiltros);
-
-    // Filtrar también al presionar Enter en el campo de nombre
-    document.getElementById('filtrNombre').addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') aplicarFiltros();
-    });
+    document.getElementById('filtrEstado').addEventListener('change', aplicarFiltros);
+    document.getElementById('filtrNombre').addEventListener('input', aplicarFiltros); // ← falta esta línea
 });
 
 // Protección contra botón atrás
-window.addEventListener('pageshow', function(e) {
+window.addEventListener('pageshow', function (e) {
     const user = localStorage.getItem('user');
     if (!user) {
         if (e.persisted) window.location.reload();
