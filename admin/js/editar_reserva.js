@@ -21,8 +21,8 @@ async function cargarListaReservas() {
         
         reservas.forEach(r => {
             const option = document.createElement('option');
-            option.value = r.id_reserva;
-            option.textContent = `Reserva #${r.id_reserva} - ${r.nombre_sala} (${r.fecha})`;
+            option.value = r.id;
+            option.textContent = `Reserva #${r.id} - ${r.nombre_sala} (${r.fecha})`;
             select.appendChild(option);
         });
     } catch (err) { console.error("Error al cargar lista", err); }
