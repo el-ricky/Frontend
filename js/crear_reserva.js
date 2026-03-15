@@ -49,11 +49,11 @@ async function cargarSalones() {
             // Actualizar interfaz
             document.getElementById('nombre_sala_titulo').textContent = salon.nombre;
             const img = document.getElementById('imagen_sala');
-            if (img) img.src = `../img/${salon.imagen || 'placeholder.jpg'}`;
+            if (img) img.src = salon.imagen || 'https://via.placeholder.com/400x200?text=Sin+Imagen';
         }
     } catch (e) { 
         console.error("Error cargando el salón", e); 
-        if (img) img.src = salon.imagen || 'https://via.placeholder.com/400x200?text=Sin+Imagen';
+        document.getElementById('nombre_sala_titulo').textContent = "Error al cargar datos de la sala";
     }
 }
 
