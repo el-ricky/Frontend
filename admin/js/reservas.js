@@ -44,8 +44,8 @@ function renderizarTabla(reservas) {
         const fecha = new Date(reserva.fecha).toLocaleDateString('es-MX');
 
         // Determinar color del badge
-        const badgeClass = reserva.estado === 'Pagado' ? 'bg-success' : 
-                           reserva.estado === 'Pendiente' ? 'bg-warning' : 'bg-secondary';
+        const badgeClass = reserva.estado_pago === 'Pagado' ? 'bg-success' : 
+                           reserva.estado_pago === 'Pendiente' ? 'bg-warning' : 'bg-secondary';
 
         const fila = `
             <tr>
