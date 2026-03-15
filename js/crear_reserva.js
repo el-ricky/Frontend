@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 1. Verificar sesión (Si guardaste el id como 'userId' o 'id', asegúrate que coincida)
     const userId = localStorage.getItem('id');
     if (!userId) {
-        window.location.href = 'login.html';
+        window.location.href = 'login_new.html';
         return;
     }
 
@@ -180,14 +180,16 @@ document.getElementById('reservaForm').addEventListener('submit', async (e) => {
 
 // Eventos
 document.getElementById('id_servicio').addEventListener('change', procesarCambios);
-['fecha', 'hora_inicio', 'hora_fin'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('change', procesarCambios);
+
+document.getElementById('fecha').addEventListener('change',()=> {
+    document.getElementById('hora_inicio').value='00:00';
+    document.getElementById('hora_fin').value = '23:59';
+    procesarCambios();
 });
 
 if(document.getElementById('btnLogout')) {
     document.getElementById('btnLogout').addEventListener('click', () => {
         localStorage.clear();
-        window.location.href = 'login.html';
+        window.location.href = 'login_new.html';
     });
 }
