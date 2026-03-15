@@ -1,12 +1,43 @@
+let paginaActual = 1;
+const limitePorPagina = 10;
+
 document.addEventListener('DOMContentLoaded', () => {
     obtenerReservas();
+    document.getElementById('prev-page').addEventListener('click', () => {
+        if (paginaActual > 1) {
+            paginaActual--;
+            obtenerReservas();
+        }
+    });
+
+    document.getElementById('next-page').addEventListener('click', () => {
+        paginaActual++;
+        obtenerReservas();
+    });
 });
 
 async function obtenerReservas() {
     const tabla = document.getElementById('lista-reservas');
+    const email = document.getElementById('filter-email').value;
+    const salon = document.getElementById('filter-salon').value;
+    const fecha = document.getElementById('filter-fecha').value;
+    const orden = document.getElementById('filter-orden').value;
+
+    document.getElementById('current-page').innerText = `Página ${paginaActual}`;
+
+    const params = new URLSearchParams({
+        page: paginaActual,
+        limit: limitePorPagina,
+        email: email,
+        id_sala: salon,
+        fecha: fecha,
+        sort: orden
+    });
 
     try {
-        const response = await fetch('https://backend-salones.vercel.app/api/reservas', {
+        tabla.innerHTML = '<tr><td colspan="11" class="text-center">Cargando reservas...</td></tr>';
+
+        const response = await fetch(`https://backend-salones.vercel.app/api/reservas?${params.toString()}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include' 
@@ -16,6 +47,8 @@ async function obtenerReservas() {
 
         const reservas = await response.json();
         renderizarTabla(reservas);
+        document.getElementById('prev-page').disabled = (paginaActual === 1);
+        document.getElementById('next-page').disabled = (reservas.length < limitePorPagina);
 
     } catch (error) {
         console.error('Error:', error);
@@ -28,36 +61,40 @@ async function obtenerReservas() {
     }
 }
 
+function aplicarFiltros() {
+    paginaActual = 1;
+    obtenerReservas();
+}
+
 function renderizarTabla(reservas) {
     const tabla = document.getElementById('lista-reservas');
     
-    if (reservas.length === 0) {
-        tabla.innerHTML = '<tr><td colspan="11" class="text-center">No hay reservas registradas.</td></tr>';
+    if (!reservas || reservas.length === 0) {
+        tabla.innerHTML = '<tr><td colspan="11" class="text-center">No se encontraron reservas con esos filtros.</td></tr>';
         return;
     }
 
-    tabla.innerHTML = ''; // Limpiar mensaje de carga
+    tabla.innerHTML = ''; 
 
     reservas.forEach((reserva, index) => {
+        const numeroReserva = ((paginaActual - 1) * limitePorPagina) + (index + 1);
         
-        // Formatear fecha (DD/MM/YYYY)
-        const fecha = new Date(reserva.fecha).toLocaleDateString('es-MX');
+        const fechaFormateada = new Date(reserva.fecha).toLocaleDateString('es-MX', { timeZone: 'UTC' });
 
-        // Determinar color del badge
         const badgeClass = reserva.estado_pago === 'Pagado' ? 'bg-success' : 
-                           reserva.estado_pago === 'Pendiente' ? 'bg-warning' : 'bg-secondary';
+                           reserva.estado_pago === 'Pendiente' ? 'bg-warning text-dark' : 'bg-secondary';
 
         const fila = `
             <tr>
-                <td><strong>#${index + 1}</strong></td>
-                <td>${fecha}</td>
+                <td><strong>#${numeroReserva}</strong></td>
+                <td>${fechaFormateada}</td>
                 <td>${reserva.nombre_sala}</td>
                 <td><span class="badge ${badgeClass}">${reserva.estado_pago}</span></td>
                 <td>${reserva.hora_inicio}</td>
                 <td>${reserva.hora_fin}</td>
                 <td>${reserva.nombre_completo}</td>
                 <td>${reserva.email_cliente}</td>
-                <td>${reserva.nombre_servicio || 'No'}</td>
+                <td>${reserva.nombre_servicio || 'Ninguno'}</td>
                 <td><strong>$${parseFloat(reserva.total_pagar).toLocaleString('es-MX', {minimumFractionDigits: 2})}</strong></td>
                 <td>
                     <div class="acciones-btn-group">
@@ -72,30 +109,22 @@ function renderizarTabla(reservas) {
 }
 
 async function cancelarReserva(id) {
-    if (!confirm('¿Estás seguro de que deseas desactivar esta reserva?')) {
-        return;
-    }
+    if (!confirm('¿Estás seguro de que deseas desactivar esta reserva?')) return;
 
     try {
         const response = await fetch(`https://backend-salones.vercel.app/api/reservas/${id}/desactivar`, {
             method: 'PATCH',
-            headers: { 
-                'Content-Type': 'application/json' 
-            },
-            credentials: 'include' // Importante para validar la sesión en el servidor
+            credentials: 'include'
         });
-
-        const data = await response.json();
 
         if (response.ok) {
             alert('Reserva desactivada correctamente');
             obtenerReservas(); 
         } else {
-            alert(`Error: ${data.message || 'No se pudo desactivar la reserva'}`);
+            const data = await response.json();
+            alert(`Error: ${data.message || 'No se pudo desactivar'}`);
         }
-
     } catch (error) {
-        console.error('Error al desactivar:', error);
-        alert('Hubo un error de conexión con el servidor.');
+        alert('Error de conexión.');
     }
 }

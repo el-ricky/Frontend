@@ -50,7 +50,35 @@
                 <h2>Ver Reservas</h2>
                 <p>Gestiona todas las reservas del sistema</p>
             </div>
-
+            <div class="filters-container mb-4 p-3 bg-light rounded">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <input type="text" id="filter-email" class="form-control" placeholder="Email del cliente">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filter-salon" class="form-control">
+                            <option value="">Todos los salones</option>
+                            </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" id="filter-fecha" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filter-orden" class="form-control">
+                            <option value="DESC">Más recientes primero</option>
+                            <option value="ASC">Más antiguas primero</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mt-3">
+                    <button class="btn btn-custom" onclick="aplicarFiltros()">Buscar</button>
+                    <div id="paginacion-controles">
+                        <button class="btn btn-outline-secondary btn-sm" id="prev-page">Anterior</button>
+                        <span id="current-page" class="mx-2">Página 1</span>
+                        <button class="btn btn-outline-secondary btn-sm" id="next-page">Siguiente</button>
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive table-responsive-grande">
                 <table class="table table-hover table-striped table-grande">
                     <thead class="table-light">
