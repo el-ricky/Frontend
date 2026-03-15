@@ -3,20 +3,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('formEditarSala');
     const alertContainer = document.getElementById('alert-container');
     const btnGuardar = document.getElementById('btnGuardar');
+    const btnEstado = document.getElementById('btnEliminar'); 
 
     const API_URL = 'https://backend-salones.vercel.app/api/salones/';
     const UPLOAD_URL = 'https://backend-salones.vercel.app/api/upload/';
+    let salaEstaActiva = true;
 
-    // 1. Cargar todas las salas al iniciar
     async function cargarSalas() {
         try {
-            const res = await fetch(API_URL);
+            const res = await fetch(`${API_URL}all`);
             const salas = await res.json();
             
             selector.innerHTML = '<option value="">-- Seleccione una sala --</option>';
             salas.forEach(sala => {
                 const option = document.createElement('option');
-                option.value = sala.id; // Ajusta si el campo es id_sala
+                option.value = sala.id;
                 option.textContent = `${sala.nombre} (Capacidad: ${sala.capacidad})`;
                 selector.appendChild(option);
             });
@@ -25,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 2. Detectar cambio en el selector para cargar datos de la sala
     selector.addEventListener('change', async (e) => {
         const id = e.target.value;
         if (!id) {
@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch(`${API_URL}${id}`);
             const sala = await res.json();
 
-            // Rellenar formulario
             document.getElementById('id_sala').value = sala.id;
             document.getElementById('nombre').value = sala.nombre;
             document.getElementById('capacidad').value = sala.capacidad;
@@ -45,6 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('descripcion').value = sala.descripcion;
             document.getElementById('current_imagenUrl').value = sala.imagen;
             document.getElementById('img-actual').src = sala.imagen;
+            salaEstaActiva = sala.activo; 
+            
+            if (salaEstaActiva) {
+                btnEstado.textContent = 'Desactivar Sala';
+                btnEstado.className = 'btn btn-warning'; // Color naranja para advertir
+            } else {
+                btnEstado.textContent = 'Activar Sala';
+                btnEstado.className = 'btn btn-success'; // Color verde para activar
+            }
 
             form.style.display = 'block';
         } catch (error) {
@@ -52,7 +60,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 3. Procesar la edición
+    btnEstado.addEventListener('click', async () => {
+        const id = document.getElementById('id_sala').value;
+        if (!id) return;
+
+        const accion = salaEstaActiva ? 'desactivar' : 'activar';
+        const urlFinal = `${API_URL}${id}/${accion}`;
+
+        if (!confirm(`¿Estás seguro de que deseas ${accion} esta sala?`)) return;
+
+        try {
+            btnEstado.disabled = true;
+            const response = await fetch(urlFinal, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: id }), 
+                credentials: 'include' 
+            });
+
+            if (response.ok) {
+                showAlert(`Sala ${accion}da con éxito`, 'success');
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                const errData = await response.json();
+                throw new Error(errData.message || 'Error al cambiar el estado');
+            }
+        } catch (error) {
+            showAlert('Error: ' + error.message, 'danger');
+            btnEstado.disabled = false;
+        }
+    });
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         btnGuardar.disabled = true;
@@ -107,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnGuardar.textContent = 'Guardar Cambios';
         }
     });
-
+    
     function showAlert(msg, type) {
         alertContainer.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
     }
