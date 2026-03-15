@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const res = await fetch(`${API_URL}${id}`,{
+            const res = await fetch(`${API_URL}${id}/admin`,{
                 credentials: 'include'
             });
             const sala = await res.json();
