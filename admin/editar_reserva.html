@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Sala - Tenex Reservas</title>
+    <title>Editar Reserva - Tenex Reservas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
 </head>
@@ -46,63 +46,65 @@
 
     <section class="section-padding" style="margin-top: 5rem;">
         <div class="container">
-            <div class="section-title text-center">
-                <h2>Editar Sala</h2>
-                <p>Modifica la información de las salas existentes</p>
+            <div class="section-title">
+                <h2>Editar Reserva</h2>
+                <p>Modifica la información de las reservas existentes</p>
             </div>
 
             <div id="alert-container"></div>
 
             <div class="form-containerPerfil">
                 <div class="form-group mb-4">
-                    <label for="seleccionar_sala">Seleccionar sala a editar:</label>
-                    <select id="seleccionar_sala" class="form-control">
-                        <option value="">-- Cargando salas... --</option>
+                    <label for="seleccionar_reserva">Seleccionar reserva a editar:</label>
+                    <select id="seleccionar_reserva" class="form-control">
+                        <option value="">-- Seleccione una reserva --</option>
                     </select>
                 </div>
 
-                <form id="formEditarSala" style="display: none;">
+                <form id="formReserva" style="display: none;">
+                    <input type="hidden" id="id_reserva">
                     <input type="hidden" id="id_sala">
-                    <input type="hidden" id="current_imagenUrl">
+                    <input type="hidden" id="id_usuario">
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label for="nombre">Nombre de la Sala:</label>
-                                <input type="text" id="nombre" class="form-control" required>
+                            <div class="form-group">
+                                <label>Sala (Solo lectura):</label>
+                                <input type="text" id="nombre_sala" class="form-control" readonly>
                             </div>
-                            <div class="form-group mb-3">
-                                <label for="capacidad">Capacidad:</label>
-                                <input type="number" id="capacidad" class="form-control" required>
+                            <div class="form-group">
+                                <label for="fecha">Fecha:</label>
+                                <input type="date" id="fecha" class="form-control" required>
                             </div>
-                            <div class="form-group mb-3">
-                                <label for="precio">Precio por hora:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input type="number" id="precio" class="form-control" step="0.01" required>
-                                </div>
+                            <div class="form-group">
+                                <label>Precio Sala:</label>
+                                <input type="text" id="precio_sala" class="form-control" readonly>
                             </div>
                         </div>
+
                         <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label for="descripcion">Descripción:</label>
-                                <textarea id="descripcion" class="form-control" rows="4"></textarea>
+                            <div class="form-group">
+                                <label for="hora_inicio">Hora Inicio:</label>
+                                <input type="time" id="hora_inicio" class="form-control" required>
                             </div>
-                            <div class="form-group mb-3">
-                                <label for="imagen">Cambiar Imagen (Opcional):</label>
-                                <input type="file" id="imagen" class="form-control" accept="image/*">
-                                <div id="preview-container" class="mt-2">
-                                    <small class="text-muted">Imagen actual:</small><br>
-                                    <img id="img-actual" src="" class="img-thumbnail" style="max-width: 150px;">
-                                </div>
+                            <div class="form-group">
+                                <label for="hora_fin">Hora Fin:</label>
+                                <input type="time" id="hora_fin" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="estado">Estado:</label>
+                                <select id="estado" class="form-control" disabled>
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Pagado">Pagada</option>
+                                    <option value="Cancelado">Cancelada</option>
+                                </select>
                             </div>
                         </div>
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
-                        <button type="submit" id="btnGuardar" class="btn btn-custom">Guardar Cambios</button>
-                        <button type="button" id="btnEliminar" class="btn btn-danger">Eliminar Sala</button>
-                        <a href="admin_dashboard.html" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-custom">Guardar Cambios</button>
+                        <button type="button" class="btn btn-custom" onclick="window.history.back()">Cancelar</button>
                     </div>
                 </form>
             </div>
@@ -110,7 +112,6 @@
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./js/editar_sala.js"></script>
-    <script src="./js/logout.js"></script>
+    <script src="./js/editar_reserva.js"></script>
 </body>
 </html>

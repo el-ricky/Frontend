@@ -185,7 +185,7 @@ document.getElementById('editarReservaForm').addEventListener('submit', async (e
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 fecha: nuevaFecha,
-                id_cliente: parseInt(localStorage.getItem('id')),
+                id_cliente: JSON.parse(localStorage.getItem('user')).id,
                 id_salon: parseInt(idSalon),
                 hora_inicio: document.getElementById('hora_inicio').value,
                 hora_fin: document.getElementById('hora_fin').value,
