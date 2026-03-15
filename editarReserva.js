@@ -178,7 +178,7 @@ document.getElementById('editarReservaForm').addEventListener('submit', async (e
 
     try {
         const response = await fetch(`${API_BASE}/reservas/${reservaId}`, {
-            method: 'PATCH',
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ fecha: nuevaFecha }),
             credentials: 'include'
