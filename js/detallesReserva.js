@@ -77,6 +77,16 @@ async function cargarDetallesReserva() {
 
         const data    = await response.json();
         const reserva = Array.isArray(data) ? data[0] : data;
+        // Cargar imagen antes de renderizar
+
+        try {
+            const salaRes = await fetch(`https://backend-salones.vercel.app/api/salones/${reserva.id_sala}`);
+            const salaData = await salaRes.json();
+            reserva.imagen_sala = salaData.imagen || 'https://via.placeholder.com/400x200?text=Sin+Imagen';
+        } catch {
+            reserva.imagen_sala = 'https://via.placeholder.com/400x200?text=Sin+Imagen';
+        }
+
         renderizarDetalles(reserva);
 
     } catch (error) {
@@ -188,16 +198,8 @@ function renderizarDetalles(reserva) {
     }
 
     if (imagenSala) {
+    imagenSala.src = reserva.imagen_sala;
     imagenSala.alt = `Imagen de ${reserva.nombre_sala || 'la sala'}`;
-    // Cargar imagen desde el endpoint de salones
-    fetch(`https://backend-salones.vercel.app/api/salones/${reserva.id_sala}`)
-        .then(r => r.json())
-        .then(sala => {
-            imagenSala.src = sala.imagen || 'https://via.placeholder.com/400x200?text=Sin+Imagen';
-        })
-        .catch(() => {
-            imagenSala.src = 'https://via.placeholder.com/400x200?text=Sin+Imagen';
-        });
 }
 }
 
