@@ -1,0 +1,869 @@
+:root {
+    --spacing-xs: clamp(0.5rem, 1.5vw, 1rem);
+    --spacing-sm: clamp(0.5rem, 0.5vw, 1.5rem);
+    --spacing-md: clamp(1.5rem, 3vw, 2rem);
+    --spacing-lg: clamp(2rem, 5vw, 4rem);
+    --spacing-xl: clamp(3rem, 7vw, 6rem);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #fdf6f0;
+    color: #3e2f2f;
+    line-height: 1.6;
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* HEADER RESPONSIVO */
+.header {
+    width: 100%;
+    background: #f3e1d6;
+    padding: var(--spacing-sm) var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    min-height: 5rem;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    box-shadow: 0 2px 10px rgba(93, 64, 55, 0.1);
+}
+
+.logo img {
+    height: clamp(3rem, 8vw, 5rem);
+    object-fit: contain;
+    filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* NAVEGACIÓN RESPONSIVA */
+.nav-bar {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: #6d5450;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 600;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    transition: 0.3s;
+    white-space: nowrap;
+    border-radius: clamp(0.3rem, 1vw, 0.5rem);
+}
+
+.nav-menu a:hover {
+    color: #8a5c39;
+    background-color: rgba(138, 92, 57, 0.1);
+}
+
+/* BOTONES PERSONALIZADOS */
+.btn-custom {
+    background: #8a5c39;
+    border: 2px solid #8a5c39;
+    color: #fff;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: clamp(0.4rem, 1.5vw, 0.6rem);
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-custom:hover {
+    background: #5d4037;
+    border-color: #5d4037;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(93, 64, 55, 0.3);
+    color: #fff;
+}
+
+.btn-acciones-separadas {
+    display: flex;
+    gap: 30px;
+    /* Ajusta la separación entre botones */
+}
+
+/* CARRUSEL BOOTSTRAP PERSONALIZADO */
+.hero {
+    margin-top: 5rem;
+    height: 70vh;
+    min-height: 450px;
+    max-height: 550px;
+    position: relative;
+    overflow: hidden;
+}
+
+#carouselTenex {
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+#carouselTenex .carousel-inner {
+    height: 100%;
+}
+
+#carouselTenex .carousel-item {
+    height: 100%;
+}
+
+#carouselTenex .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* CAPTIONS PERSONALIZADOS PARA BOOTSTRAP */
+#carouselTenex .carousel-caption {
+    position: absolute;
+    bottom: clamp(1rem, 5vh, 3rem);
+    left: clamp(1rem, 5vw, 3rem);
+    right: auto;
+    text-align: left;
+    max-width: min(500px, 90vw);
+    background: linear-gradient(90deg, rgb(213 198 193 / 0%) 0%, rgb(47 32 28 / 18%) 100%);
+    padding: var(--spacing-md);
+    border-radius: clamp(0.5rem, 2vw, 0.8rem);
+    backdrop-filter: blur(5px);
+    z-index: 99;
+}
+
+#carouselTenex .carousel-caption h2 {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    margin-bottom: var(--spacing-sm);
+    color: #fdf6f0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+#carouselTenex .carousel-caption p {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    margin-bottom: var(--spacing-md);
+    color: #f0e6e0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* INDICADORES PERSONALIZADOS */
+#carouselTenex .carousel-indicators {
+    bottom: 20px;
+    z-index: 100;
+}
+
+#carouselTenex .carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(253, 246, 240, 0.5);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    z-index: 101;
+}
+
+#carouselTenex .carousel-indicators button.active {
+    background-color: #f5e6dd;
+    transform: scale(1.2);
+}
+
+#carouselTenex .carousel-indicators button:hover {
+    background-color: rgba(253, 246, 240, 0.8);
+}
+
+/* CONTROLES PERSONALIZADOS */
+#carouselTenex .carousel-control-prev,
+#carouselTenex .carousel-control-next {
+    width: 5%;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+}
+
+#carouselTenex .carousel-control-prev:hover,
+#carouselTenex .carousel-control-next:hover {
+    opacity: 1;
+}
+
+#carouselTenex .carousel-control-prev-icon,
+#carouselTenex .carousel-control-next-icon {
+    background-color: rgba(93, 64, 55, 0.7);
+    border-radius: 50%;
+    padding: 1rem;
+    background-size: 60%;
+    z-index: 101;
+}
+
+/* SECCIONES GENERALES */
+section {
+    padding: var(--spacing-xl) 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.section-title h2 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: #5d4037;
+    margin-bottom: var(--spacing-sm);
+    position: relative;
+    display: inline-block;
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: #8d6e63;
+}
+
+.section-title p {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: #6d4c41;
+}
+
+/* ABOUT CONTENT RESPONSIVO */
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.about-text {
+    flex: 1;
+    min-width: min(100%, 500px);
+}
+
+.about-text h3 {
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    margin-bottom: var(--spacing-sm);
+    color: #5d4037;
+}
+
+.about-text p {
+    margin-bottom: var(--spacing-sm);
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    color: #6d4c41;
+}
+
+.about-image {
+    flex: 1;
+    min-width: min(100%, 500px);
+    border-radius: clamp(0.5rem, 2vw, 0.8rem);
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(62, 47, 47, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.about-image:hover {
+    transform: translateY(-5px);
+}
+
+.about-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.about-image img:hover {
+    transform: scale(1.02);
+}
+
+/* SERVICIOS */
+.services {
+    background-color: #f5e6dd;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: var(--spacing-lg);
+}
+
+.service-card {
+    background-color: #fdf6f0;
+    border-radius: clamp(0.5rem, 2vw, 0.8rem);
+    padding: var(--spacing-lg);
+    box-shadow: 0 5px 15px rgba(62, 47, 47, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+    border: 1px solid #f3e1d6;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(62, 47, 47, 0.1);
+}
+
+.service-card h3 {
+    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    margin-bottom: var(--spacing-sm);
+    color: #5d4037;
+}
+
+.service-card p {
+    color: #6d4c41;
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+}
+
+/* CONTACTO */
+.contact-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.contact-item {
+    text-align: center;
+    padding: var(--spacing-lg);
+    background: #fdf6f0;
+    border-radius: clamp(0.5rem, 2vw, 0.8rem);
+    box-shadow: 0 5px 15px rgba(62, 47, 47, 0.05);
+    transition: transform 0.3s ease;
+    border: 1px solid #f3e1d6;
+}
+
+.contact-item:hover {
+    transform: translateY(-5px);
+}
+
+.contact-item h3 {
+    font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+    margin-bottom: var(--spacing-sm);
+    color: #5d4037;
+}
+
+.contact-item p {
+    color: #6d4c41;
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+}
+
+/* FORMULARIOS (Reutilizado para login) */
+.form-container {
+    max-width: 680px;
+    margin: 0 auto;
+    background: #fdf6f0;
+    padding: var(--spacing-xl);
+    border-radius: clamp(0.8rem, 3vw, 1.2rem);
+    box-shadow: 0 10px 30px rgba(62, 47, 47, 0.1);
+    border: 1px solid #f3e1d6;
+}
+
+.form-containerPerfil {
+    max-width: 9000px;
+    margin: 0 auto;
+    background: #fdf6f0;
+    padding: var(--spacing-xl);
+    border-radius: clamp(0.8rem, 3vw, 1.2rem);
+    box-shadow: 0 10px 30px rgba(62, 47, 47, 0.1);
+    border: 1px solid #f3e1d6;
+}
+
+.form-container-wide {
+    max-width: 5000px;
+    /* Ajusta el ancho según lo que quieras */
+    margin: 0 auto;
+    background: #fdf6f0;
+    padding: var(--spacing-xl);
+    border-radius: clamp(0.8rem, 3vw, 1.2rem);
+    box-shadow: 0 10px 30px rgba(62, 47, 47, 0.1);
+    border: 1px solid #f3e1d6;
+}
+
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    color: #5d4037;
+    font-weight: 600;
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+}
+
+.form-group input {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 2px solid #e0d1c5;
+    border-radius: clamp(0.4rem, 1.5vw, 0.6rem);
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+    background-color: #fff;
+    transition: all 0.3s ease;
+    color: #3e2f2f;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #8a5c39;
+    box-shadow: 0 0 0 3px rgba(138, 92, 57, 0.1);
+}
+
+.form-group input:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: #e0d1c5;
+}
+
+/* FOOTER */
+footer {
+    background-color: #5d4037;
+    color: #fdf6f0;
+    padding: var(--spacing-xl) 0 var(--spacing-lg);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.footer-column h3 {
+    font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+    margin-bottom: var(--spacing-sm);
+    position: relative;
+    padding-bottom: var(--spacing-xs);
+}
+
+.footer-column h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background-color: #8d6e63;
+}
+
+.footer-column p {
+    margin-bottom: var(--spacing-sm);
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+    color: #f0e6e0;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.footer-links a {
+    color: #f0e6e0;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+}
+
+.footer-links a:hover {
+    color: #d7b89e;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid rgba(253, 246, 240, 0.2);
+}
+
+.footer-bottom p {
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    color: #f0e6e0;
+}
+
+/* UTILIDADES */
+.text-center {
+    text-align: center;
+}
+
+.separator {
+    margin: var(--spacing-lg) 0;
+    position: relative;
+    text-align: center;
+}
+
+.separator hr {
+    border: none;
+    height: 1px;
+    background-color: #e0d1c5;
+    margin: var(--spacing-md) 0;
+}
+
+/* MEDIA QUERIES - HEADER SUPER COMPACTO Y CARRUSEL ARREGLADO */
+@media (max-width: 768px) {
+    .header {
+        padding: 0.3rem 0.8rem;
+        min-height: 2.8rem;
+        gap: 0.3rem;
+        flex-wrap: nowrap;
+    }
+
+    .logo img {
+        height: 1.8rem;
+    }
+
+    .nav-bar {
+        flex: none;
+    }
+
+    .nav-menu {
+        gap: 0.2rem;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 0.2rem 0;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-menu a {
+        font-size: 0.65rem;
+        padding: 0.25rem 0.4rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .btn-custom {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.65rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .hero {
+        margin-top: 2.8rem;
+        min-height: 50vh;
+        height: 50vh;
+    }
+
+    /* BOTONES DEL CARRUSEL MÁS GRANDES EN MÓVIL */
+    #carouselTenex .carousel-control-prev,
+    #carouselTenex .carousel-control-next {
+        width: 15%;
+        opacity: 0.8;
+    }
+
+    #carouselTenex .carousel-control-prev-icon,
+    #carouselTenex .carousel-control-next-icon {
+        padding: 0.8rem;
+        background-size: 50%;
+        background-color: rgba(93, 64, 55, 0.8);
+    }
+
+    #carouselTenex .carousel-caption {
+        left: 5%;
+        right: 5%;
+        text-align: center;
+        padding: var(--spacing-sm);
+        bottom: clamp(2rem, 8vh, 4rem);
+    }
+
+    #carouselTenex .carousel-indicators {
+        bottom: 10px;
+    }
+
+    #carouselTenex .carousel-caption h2 {
+        font-size: clamp(1.3rem, 4vw, 1.8rem);
+    }
+
+    #carouselTenex .carousel-caption p {
+        font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    }
+
+    .about-content {
+        flex-direction: column;
+    }
+
+    .about-text,
+    .about-image {
+        min-width: 100%;
+    }
+
+    section {
+        padding: var(--spacing-lg) 0;
+    }
+
+    .form-container {
+        margin: 0 var(--spacing-sm);
+        padding: var(--spacing-lg);
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        min-height: 2.5rem;
+        padding: 0.2rem 0.6rem;
+        gap: 0.2rem;
+    }
+
+    .logo img {
+        height: 1.5rem;
+    }
+
+    .nav-menu {
+        gap: 0.15rem;
+    }
+
+    .nav-menu a {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.3rem;
+    }
+
+    .btn-custom {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.6rem;
+    }
+
+    .hero {
+        margin-top: 2.5rem;
+        min-height: 40vh;
+        height: 40vh;
+    }
+
+    /* BOTONES DEL CARRUSEL AÚN MÁS ACCESIBLES */
+    #carouselTenex .carousel-control-prev,
+    #carouselTenex .carousel-control-next {
+        width: 20%;
+    }
+
+    #carouselTenex .carousel-control-prev-icon,
+    #carouselTenex .carousel-control-next-icon {
+        padding: 0.6rem;
+        background-size: 40%;
+    }
+
+    #carouselTenex .carousel-caption {
+        padding: var(--spacing-xs);
+        bottom: clamp(1.5rem, 6vh, 3rem);
+    }
+
+    #carouselTenex .carousel-caption h2 {
+        font-size: clamp(1.2rem, 4vw, 1.6rem);
+    }
+
+    #carouselTenex .carousel-caption p {
+        font-size: clamp(0.8rem, 1.6vw, 1rem);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    #carouselTenex .carousel-indicators {
+        bottom: 5px;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-container {
+        padding: var(--spacing-md);
+        margin: 0 var(--spacing-xs);
+    }
+
+    .container-grande {
+        max-width: 2000px !important;
+        width: 200%;
+        margin: 0 auto;
+    }
+}
+
+/* CONTENEDORES GRANDES PARA TABLAS */
+.container-grande {
+    width: 95%;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
+}
+
+/* Ajustes específicos para tablas grandes */
+.table-responsive-grande {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Asegurar que la tabla ocupe todo el ancho */
+.table-grande {
+    width: 100%;
+    min-width: 1200px;
+}
+
+/* Espaciado entre botones en tablas */
+.acciones-btn-group .btn-custom {
+    margin-right: 8px;
+    margin-bottom: 5px;
+}
+
+/* Ajustar el tamaño de fuente de la tabla para mejor visualización */
+.table {
+    font-size: 0.95rem;
+}
+
+/* Hacer las celdas más compactas */
+.table td,
+.table th {
+    padding: 0.75rem 0.5rem;
+    vertical-align: middle;
+}
+
+/* Ajustar botones pequeños */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* AJUSTES ESPECÍFICOS PARA DROPDOWNS EN MÓVIL */
+@media (max-width: 768px) {
+    .nav-menu {
+        position: relative;
+        gap: 0.1rem;
+    }
+
+    .nav-item.dropdown {
+        position: static;
+    }
+
+    .dropdown-menu {
+        position: fixed !important;
+        top: 2.8rem !important;
+        left: 0.5rem !important;
+        right: 0.5rem !important;
+        width: auto !important;
+        background: #fdf6f0;
+        border: 1px solid #e0d1c5;
+        box-shadow: 0 4px 12px rgba(93, 64, 55, 0.2);
+        z-index: 1001;
+    }
+
+    .dropdown-item {
+        padding: 0.5rem 1rem;
+        font-size: 0.7rem;
+        color: #5d4037;
+        border-bottom: 1px solid #f3e1d6;
+    }
+
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+        background: #f3e1d6;
+        color: #8a5c39;
+    }
+
+    /* Asegurar que el dropdown tenga suficiente z-index */
+    .nav-bar {
+        z-index: 1002;
+    }
+}
+
+@media (max-width: 480px) {
+    .dropdown-menu {
+        top: 2.5rem !important;
+        left: 0.3rem !important;
+        right: 0.3rem !important;
+    }
+
+    .dropdown-item {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.65rem;
+    }
+}
+
+/* Asegurar que los dropdowns funcionen en desktop */
+.nav-item.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fdf6f0;
+    border: 1px solid #e0d1c5;
+    border-radius: 0.3rem;
+    box-shadow: 0 4px 12px rgba(93, 64, 55, 0.1);
+    min-width: 150px;
+    z-index: 1001;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #5d4037;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f3e1d6;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background: #f3e1d6;
+    color: #8a5c39;
+}
+
+/* Estilo específico para la imagen QR */
+.qr-image {
+    max-width: 150px;
+    /* Ajusta este valor según necesites */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    /* Centra la imagen */
+}
+
+/* Si quieres que todas las imágenes en about-image sean más pequeñas */
+.about-image img {
+    max-width: 90%;
+    height: auto;
+}
+
+/* O si solo quieres afectar la imagen QR específicamente */
+#registrar .about-image img.qr-image {
+    max-width: 150px;
+    width: 100%;
+}

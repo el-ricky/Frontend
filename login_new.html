@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Tenex Reservas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos rápidos para asegurar que se vea bien */
+        .form-container {
+            max-width: 450px;
+            margin: auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn-custom {
+            background-color: #8a5c39;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .btn-custom:hover {
+            background-color: #6d4c41;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html" class="logo">
+                <img src="img/Logo.png" alt="Logo" class="namedly-icon">
+            </a>
+        </div>
+        <nav class="nav-bar">
+            <ul class="nav-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="login.php">Reservar</a></li>
+                <li><a href="index.html">Nosotros</a></li>
+                <li><a href="index.html">Servicios</a></li>
+                <li><a href="index.html">Contacto</a></li>
+            </ul>
+        </nav>
+        <!-- Botón Bootstrap -->
+        <a href="login_new.html" class="btn btn-custom">Iniciar sesión</a>
+    </header>
+
+    <section class="section-padding" style="margin-top: 5rem; min-height: 80vh; display: flex; align-items: center;">
+        <div class="container">
+            <div class="form-container">
+                <div class="text-center mb-4">
+                    <h2>Iniciar sesión</h2>
+                </div>
+
+                <div id="alertContainer"></div>
+
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-control" id="email" placeholder="tu@correo.com" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" placeholder="Tu contraseña" required>
+                    </div>
+
+                    <button type="submit" id="btnIngresar" class="btn btn-custom w-100 mt-3">
+                        <span id="btnText">Ingresar</span>
+                        <span id="btnLoader" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                    </button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p>¿No tienes una cuenta? <a href="registro.html" class="text-decoration-none fw-bold" style="color: #8a5c39;">Regístrate</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>
