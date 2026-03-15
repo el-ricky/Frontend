@@ -47,6 +47,7 @@ async function cargarDatosReserva(id) {
             document.getElementById('hora_fin').value = data.hora_fin;
             document.getElementById('precio_sala').value = `$${data.precio_sala}`;
             document.getElementById('estado').value = data.estado_pago;
+            document.getElementById('estado').disabled = true;
         }
     } catch (err) { alert("Error al obtener la reserva"); }
 }
