@@ -97,14 +97,11 @@ function aplicarFiltros() {
 
     let filtrados = todosLosUsuarios;
 
-    // Filtro por nombre (busca en nombre, aPaterno o aMaterno)
     if (nombre) {
         filtrados = filtrados.filter(u =>
-            (u.nombre || '').toLowerCase().includes(nombre)
+            (u.nombre || '').toLowerCase().startsWith(nombre)
         );
     }
-
-    // Filtro por estado
     if (estado === 'activo') {
         filtrados = filtrados.filter(u => u.activo === 1 || u.activo === true);
     } else if (estado === 'inactivo') {
@@ -163,12 +160,11 @@ async function activarUsuario(id) {
     }
 }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     cargarUsuarios();
     document.getElementById('btnLimpiar').addEventListener('click', limpiarFiltros);
     document.getElementById('filtrEstado').addEventListener('change', aplicarFiltros);
-    document.getElementById('filtrNombre').addEventListener('input', aplicarFiltros); // ← falta esta línea
+    document.getElementById('filtrNombre').addEventListener('input', aplicarFiltros);
 });
 
 // Protección contra botón atrás
