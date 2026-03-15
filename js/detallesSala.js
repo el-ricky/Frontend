@@ -24,7 +24,7 @@ async function cargarDetalleSala(id) {
         // 2. Llenar los campos del HTML
         document.getElementById('titulo-pagina').innerText = "Detalles de la Sala";
         document.getElementById('subtitulo-nombre').innerText = sala.nombre;
-        document.getElementById('sala-img').src = `../img/${sala.imagen || 'default-sala.jpg'}`;
+        document.getElementById('sala-img').src = sala.imagen || 'https://via.placeholder.com/400x200?text=Sin+Imagen';
         document.getElementById('sala-img').alt = `Imagen de ${sala.nombre}`;
         
         document.getElementById('sala-nombre').value = sala.nombre;
