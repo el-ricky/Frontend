@@ -160,7 +160,7 @@ function generarBotones(reserva) {
     const btnDetalles = `<a href="detallesReserva.html?id=${id}" class="btn btn-custom">Detalles</a>`;
 
     const btnConfirmar = (!esCancelada && !esPagada)
-        ? `<a href="confirmarPago.html?id=${id}" class="btn btn-custom">Confirmar</a>`
+        ? `<button class="btn btn-custom" onclick="pagarReserva(${id})">Confirmar</button>`
         : `<button class="btn btn-custom" disabled>Confirmar</button>`;
 
     const btnCancelar = esCancelada
@@ -168,6 +168,17 @@ function generarBotones(reserva) {
         : `<button class="btn btn-custom" onclick="cancelarReserva(${id}, this)">Cancelar</button>`;
 
     return `${btnDetalles} ${btnConfirmar} ${btnCancelar}`;
+}
+
+async function pagarReserva(id) {
+    const res = await fetch(`${API_URL}/api/pagos/crear-preferencia`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reservaId: id })
+    });
+    const data = await res.json();
+    window.location.href = data.init_point;
 }
 
 function renderizarReservas(reservas) {
