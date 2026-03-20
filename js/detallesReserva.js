@@ -134,6 +134,17 @@ function formatearHora(horaStr) {
     return horaStr;
 }
 
+async function pagarReserva(id) {
+    const res = await fetch(`${API_URL}/pagos/crear-preferencia`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_reserva: id , origin_url: window.location.origin})
+    });
+    const data = await res.json();
+    window.location.href = data.init_point;
+}
+
 function renderizarDetalles(reserva) {
     if (!reserva) { mostrarReservaNoEncontrada('No se encontraron datos de la reserva'); return; }
 
@@ -153,7 +164,7 @@ function renderizarDetalles(reserva) {
         const total = reserva.total_pagar ? parseFloat(reserva.total_pagar).toFixed(2) : '0.00';
         precioTotal.value = `$${total}`;
     }
-    if (formaPago) formaPago.textContent = 'PayPal';
+    if (formaPago) formaPago.textContent = 'Mercado Pago';
 
     // Determinar estado 
     const estado      = String(reserva.estado_pago || 'pendiente').toLowerCase();
@@ -189,7 +200,7 @@ function renderizarDetalles(reserva) {
         } else {
             // Pendiente
             divBotones.innerHTML = `
-                <a href="confirmarPago.html?id=${reservaId}" class="btn btn-custom w-100">Confirmar Reserva</a>
+                <button class="btn btn-custom" onclick="pagarReserva(${id})">Confirmar</button>
                 <button class="btn btn-custom w-100" onclick="cancelarReserva()">Cancelar</button>
                 <a href="editarReserva.html?id=${reservaId}" class="btn btn-custom w-100">Editar</a>`;
         }
