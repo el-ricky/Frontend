@@ -2,28 +2,27 @@ const API_BASE = 'https://backend-salones.vercel.app/api';
 const urlParams = new URLSearchParams(window.location.search);
 const idSalaSeleccionada = urlParams.get('id');
 
+// Inicializar EmailJS
+emailjs.init("9IYgUm01aQdWhUgmH");
+
 // Inicialización
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Verificar sesión (Si guardaste el id como 'userId' o 'id', asegúrate que coincida)
     const userId = localStorage.getItem('id');
     if (!userId) {
         window.location.href = 'login_new.html';
         return;
     }
 
-    // 2. Configurar fecha mínima (hoy) para evitar reservas en el pasado
     const fechaInput = document.getElementById('fecha');
-    if(fechaInput) {
+    if (fechaInput) {
         fechaInput.min = new Date().toISOString().split('T')[0];
     }
 
     try {
-        // Ejecutar cargas iniciales
         await Promise.all([cargarSalones(), cargarServicios()]);
     } catch (error) {
         console.error("Fallo en la carga inicial:", error);
     } finally {
-        // Quitar loader siempre
         const loader = document.getElementById('loader');
         if (loader) loader.style.display = 'none';
     }
@@ -35,10 +34,8 @@ async function cargarSalones() {
     try {
         const res = await fetch(`${API_BASE}/salones/${idSalaSeleccionada}`);
         const salon = await res.json();
-        
-        // REVISIÓN: Tu API de salones devuelve 'id_sala' según tus modelos previos
         const idReal = salon.id_sala || salon.id;
-        
+
         if (salon && idReal) {
             const select = document.getElementById('id_salon');
             select.innerHTML = '';
@@ -46,13 +43,12 @@ async function cargarSalones() {
             option.selected = true;
             select.add(option);
 
-            // Actualizar interfaz
             document.getElementById('nombre_sala_titulo').textContent = salon.nombre;
             const img = document.getElementById('imagen_sala');
             if (img) img.src = salon.imagen || 'https://via.placeholder.com/400x200?text=Sin+Imagen';
         }
-    } catch (e) { 
-        console.error("Error cargando el salón", e); 
+    } catch (e) {
+        console.error("Error cargando el salón", e);
         document.getElementById('nombre_sala_titulo').textContent = "Error al cargar datos de la sala";
     }
 }
@@ -62,21 +58,17 @@ async function cargarServicios() {
         const res = await fetch(`${API_BASE}/servicios`);
         const servicios = await res.json();
         const select = document.getElementById('id_servicio');
-        select.innerHTML = `
-            <option value="0">Sin servicio adicional ($0.00)</option>
-        `;
+        select.innerHTML = `<option value="0">Sin servicio adicional ($0.00)</option>`;
 
         servicios.forEach(s => {
-            // Usamos s.id_servicio o s.id dependiendo de tu tabla servicios
             const idServ = s.id_servicio || s.id;
             select.innerHTML += `<option value="${idServ}">${s.nombre} (+$${s.costo})</option>`;
         });
-    } catch (e) { 
-        console.error("Error cargando servicios", e); 
+    } catch (e) {
+        console.error("Error cargando servicios", e);
     }
 }
 
-// Lógica de Validación y Cálculo en tiempo real
 async function procesarCambios() {
     const sala = idSalaSeleccionada;
     const serv = document.getElementById('id_servicio').value;
@@ -87,7 +79,6 @@ async function procesarCambios() {
     const status = document.getElementById('statusDisponibilidad');
     const displayPrecio = document.getElementById('total_pagar_display');
 
-    // 1. Calcular Presupuesto
     if (sala && serv) {
         try {
             const res = await fetch(`${API_BASE}/reservas/calcular-presupuesto`, {
@@ -101,7 +92,6 @@ async function procesarCambios() {
         } catch (e) { console.error("Error al calcular presupuesto", e); }
     }
 
-    // 2. Verificar Disponibilidad
     if (sala && fecha && hI && hF) {
         if (hI >= hF) {
             status.innerHTML = '<small class="text-danger">La hora de fin debe ser posterior a la de inicio.</small>';
@@ -110,15 +100,14 @@ async function procesarCambios() {
         }
 
         try {
-            // El ID '0' en la URL indica que es una reserva nueva (para el validador SQL)
             const res = await fetch(`${API_BASE}/reservas/check-disponibilidad/0`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    id_salon: parseInt(sala), 
-                    fecha, 
-                    hora_inicio: hI, 
-                    hora_fin: hF 
+                body: JSON.stringify({
+                    id_salon: parseInt(sala),
+                    fecha,
+                    hora_inicio: hI,
+                    hora_fin: hF
                 }),
                 credentials: 'include'
             });
@@ -139,7 +128,6 @@ async function procesarCambios() {
 document.getElementById('reservaForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Bloquear botón para evitar doble click
     const btn = document.getElementById('btnConfirmar');
     btn.disabled = true;
     btn.textContent = "Procesando...";
@@ -164,15 +152,53 @@ document.getElementById('reservaForm').addEventListener('submit', async (e) => {
         const resultado = await response.json();
 
         if (response.ok) {
-            alert("¡Reserva creada con éxito! Puedes verla en tu perfil.");
+            // Obtener datos del cliente para el correo
+            const user = JSON.parse(localStorage.getItem('user'));
+            const nombreSala = document.getElementById('nombre_sala_titulo').textContent;
+            const total = document.getElementById('total_pagar_display').textContent;
+
+            // Obtener email del cliente desde la API
+            let emailCliente = '';
+            let nombreCliente = user ? user.username : 'Cliente';
+            try {
+                const infoRes = await fetch(`${API_BASE}/cliente/info`, {
+                    credentials: 'include'
+                });
+                if (infoRes.ok) {
+                    const infoCliente = await infoRes.json();
+                    emailCliente = infoCliente.email || '';
+                    nombreCliente = `${infoCliente.nombre || ''} ${infoCliente.aPaterno || ''}`.trim() || user.username;
+                }
+            } catch (infoError) {
+                console.error("No se pudo obtener info del cliente:", infoError);
+            }
+
+            // Enviar correo de confirmación
+            try {
+                await emailjs.send("service_7bsmpvo", "template_51ddsvk", {
+                    nombre_cliente: nombreCliente,
+                    email_cliente: emailCliente,
+                    nombre_sala: nombreSala,
+                    fecha: payload.fecha,
+                    hora_inicio: payload.hora_inicio,
+                    hora_fin: payload.hora_fin,
+                    total: total
+                });
+                console.log("Correo enviado correctamente");
+            } catch (emailError) {
+                console.error("Error al enviar correo:", emailError);
+                // No bloqueamos el flujo si falla el correo
+            }
+
+            alert("¡Reserva creada con éxito! Recibirás un correo de confirmación.");
             window.location.href = 'misreservas.html';
         } else {
             alert("Error: " + (resultado.error || resultado.msg || "No se pudo crear la reserva"));
             btn.disabled = false;
             btn.textContent = "Confirmar Reserva";
         }
-    } catch (e) { 
-        alert("Error de conexión con el servidor"); 
+    } catch (e) {
+        alert("Error de conexión con el servidor");
         btn.disabled = false;
         btn.textContent = "Confirmar Reserva";
     }
@@ -181,15 +207,24 @@ document.getElementById('reservaForm').addEventListener('submit', async (e) => {
 // Eventos
 document.getElementById('id_servicio').addEventListener('change', procesarCambios);
 
-document.getElementById('fecha').addEventListener('change',()=> {
-    document.getElementById('hora_inicio').value='00:00';
+document.getElementById('fecha').addEventListener('change', () => {
+    document.getElementById('hora_inicio').value = '00:00';
     document.getElementById('hora_fin').value = '23:59';
     procesarCambios();
 });
 
-if(document.getElementById('btnLogout')) {
+if (document.getElementById('btnLogout')) {
     document.getElementById('btnLogout').addEventListener('click', () => {
         localStorage.clear();
         window.location.href = 'login_new.html';
     });
 }
+
+// Protección contra botón atrás
+window.addEventListener('pageshow', function(e) {
+    const user = localStorage.getItem('user');
+    if (!user) {
+        if (e.persisted) window.location.reload();
+        else window.location.replace('index.html');
+    }
+});
