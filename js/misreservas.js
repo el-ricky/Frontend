@@ -175,7 +175,7 @@ async function pagarReserva(id) {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reservaId: id })
+        body: JSON.stringify({ id_reserva: id })
     });
     const data = await res.json();
     window.location.href = data.init_point;
