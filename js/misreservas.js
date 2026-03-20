@@ -171,7 +171,7 @@ function generarBotones(reserva) {
 }
 
 async function pagarReserva(id) {
-    const res = await fetch(`${API_URL}/api/pagos/crear-preferencia`, {
+    const res = await fetch(`${API_URL}/pagos/crear-preferencia`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
