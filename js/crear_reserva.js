@@ -3,7 +3,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const idSalaSeleccionada = urlParams.get('id');
 
 // Inicializar EmailJS
-emailjs.init("9IYgUm01aQdWhUgmH");
+emailjs.init("lsGwKnCY6PKxUhshl");
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', async () => {
@@ -124,6 +124,42 @@ async function procesarCambios() {
     }
 }
 
+// Función para enviar correo de confirmación
+async function enviarCorreoConfirmacion(payload, nombreSala, total) {
+    try {
+        const infoRes = await fetch(`${API_BASE}/cliente/info`, {
+            credentials: 'include'
+        });
+
+        let emailCliente = '';
+        let nombreCliente = 'Cliente';
+
+        if (infoRes.ok) {
+            const infoCliente = await infoRes.json();
+            emailCliente = infoCliente.email || '';
+            nombreCliente = `${infoCliente.nombre || ''} ${infoCliente.aPaterno || ''}`.trim() || 'Cliente';
+        }
+
+        await emailjs.send("service_tenex", "template_9ia9rmd", {
+            nombre_cliente: nombreCliente,
+            email_cliente: emailCliente,
+            nombre_salon: nombreSala,
+            fecha: payload.fecha,
+            hora_inicio: payload.hora_inicio,
+            hora_fin: payload.hora_fin,
+            total: total,
+            link_pagina: "https://el-ricky.github.io/Frontend/login_new.html"
+        });
+
+        console.log("✅ Correo enviado correctamente");
+        return true;
+
+    } catch (error) {
+        console.error("❌ Error al enviar correo:", error);
+        return false;
+    }
+}
+
 // Envío del Formulario
 document.getElementById('reservaForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -152,43 +188,10 @@ document.getElementById('reservaForm').addEventListener('submit', async (e) => {
         const resultado = await response.json();
 
         if (response.ok) {
-            // Obtener datos del cliente para el correo
-            const user = JSON.parse(localStorage.getItem('user'));
             const nombreSala = document.getElementById('nombre_sala_titulo').textContent;
             const total = document.getElementById('total_pagar_display').textContent;
 
-            // Obtener email del cliente desde la API
-            let emailCliente = '';
-            let nombreCliente = user ? user.username : 'Cliente';
-            try {
-                const infoRes = await fetch(`${API_BASE}/cliente/info`, {
-                    credentials: 'include'
-                });
-                if (infoRes.ok) {
-                    const infoCliente = await infoRes.json();
-                    emailCliente = infoCliente.email || '';
-                    nombreCliente = `${infoCliente.nombre || ''} ${infoCliente.aPaterno || ''}`.trim() || user.username;
-                }
-            } catch (infoError) {
-                console.error("No se pudo obtener info del cliente:", infoError);
-            }
-
-            // Enviar correo de confirmación
-            try {
-                await emailjs.send("service_7bsmpvo", "template_51ddsvk", {
-                    nombre_cliente: nombreCliente,
-                    email_cliente: emailCliente,
-                    nombre_sala: nombreSala,
-                    fecha: payload.fecha,
-                    hora_inicio: payload.hora_inicio,
-                    hora_fin: payload.hora_fin,
-                    total: total
-                });
-                console.log("Correo enviado correctamente");
-            } catch (emailError) {
-                console.error("Error al enviar correo:", emailError);
-                // No bloqueamos el flujo si falla el correo
-            }
+            await enviarCorreoConfirmacion(payload, nombreSala, total);
 
             alert("¡Reserva creada con éxito! Recibirás un correo de confirmación.");
             window.location.href = 'misreservas.html';
