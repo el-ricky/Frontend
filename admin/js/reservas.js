@@ -146,3 +146,4 @@ async function cargarSalonesFiltro() {
         console.error("No se pudieron cargar los salones para el filtro");
     }
 }
+
