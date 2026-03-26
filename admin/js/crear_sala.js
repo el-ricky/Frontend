@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showAlert('¡Sala creada exitosamente!', 'success');
                 form.reset();
                 setTimeout(() => {
-                    window.location.href = "index_Administrador.php";
+                    window.location.href = "admin_dashboard.php";
                 }, 2000);
             } else {
                 throw new Error('No se pudo crear la sala en la base de datos');
