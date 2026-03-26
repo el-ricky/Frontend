@@ -200,7 +200,7 @@ function renderizarDetalles(reserva) {
         } else {
             // Pendiente
             divBotones.innerHTML = `
-                <button class="btn btn-custom" onclick="pagarReserva(${id})">Confirmar</button>
+                <button class="btn btn-custom" onclick="pagarReserva(${id_reserva})">Confirmar</button>
                 <button class="btn btn-custom w-100" onclick="cancelarReserva()">Cancelar</button>
                 <a href="editarReserva.html?id=${reservaId}" class="btn btn-custom w-100">Editar</a>`;
         }
