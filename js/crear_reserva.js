@@ -148,14 +148,14 @@ async function enviarCorreoConfirmacion(payload, nombreSala, total) {
             hora_inicio: payload.hora_inicio,
             hora_fin: payload.hora_fin,
             total: total,
-            link_pagina: "https://el-ricky.github.io/Frontend/login_new.html"
+            link_pagina: "https://salonestenex.b-corpsolutions.com/login_new.html"
         });
 
-        console.log("✅ Correo enviado correctamente");
+        console.log("Correo enviado correctamente");
         return true;
 
     } catch (error) {
-        console.error("❌ Error al enviar correo:", error);
+        console.error("Error al enviar correo:", error);
         return false;
     }
 }
