@@ -9,6 +9,7 @@ async function cargarReportes(anioInicio, anioFin) {
 
     try {
         const response = await fetch(`${API_BASE_URL}/analytics/temporadas?anio_inicio=${anioInicio}&anio_fin=${anioFin}`, {
+            method: 'GET',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
@@ -42,7 +43,7 @@ function actualizarUI(data) {
     document.getElementById('proxMes').innerText = prox;
     const tendenciaTexto = data.interpretacion || (data.tasa_crecimiento_k > 0 ? 'Crecimiento' : 'Decrecimiento');
     document.getElementById('tendencia').innerText = tendenciaTexto;
-    document.getElementById('kInterpretacion').innerText = data.tasa_crecimiento_k > 0 ? '📈 Positivo' : (data.tasa_crecimiento_k < 0 ? '📉 Negativo' : '⚖️ Neutro');
+    document.getElementById('kInterpretacion').innerText = data.tasa_crecimiento_k > 0 ? 'Positivo' : (data.tasa_crecimiento_k < 0 ? '📉 Negativo' : '⚖️ Neutro');
 
     // Tabla de temporadas
     const tbody = document.getElementById('tbodyTemporadas');
