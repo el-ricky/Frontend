@@ -1,4 +1,3 @@
-/* Estilos adicionales específicos para reportes (sin modificar tu styles.css principal) */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -88,6 +87,15 @@
     margin: 1rem 0;
 }
 
+mi-header {
+    display: block;
+    width: 100%;
+}
+
+body {
+    padding-top: 80px;
+}
+
 @media (max-width: 768px) {
     .stats-grid {
         grid-template-columns: 1fr;
@@ -98,3 +106,15 @@
         font-size: 1.4rem;
     }
 }
+
+.table-responsive-grande {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.badge.bg-alta { background-color: #ffc107 !important; color: #000; }
+.badge.bg-baja { background-color: #6c757d !important; color: #fff; }
+.badge.bg-media { background-color: #0dcaf0 !important; color: #000; }

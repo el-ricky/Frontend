@@ -1,6 +1,7 @@
 // Obtener token del localStorage (ajusta la clave según tu proyecto)
 const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 let chartInstance = null;
+API_BASE_URL = 'https://backend-salones.vercel.app/api';
 
 async function cargarReportes(anioInicio, anioFin) {
     const tbody = document.getElementById('tbodyTemporadas');
@@ -9,7 +10,7 @@ async function cargarReportes(anioInicio, anioFin) {
     tbodyProy.innerHTML = '<tr><td colspan="2" class="text-center">Cargando...</td></tr>';
 
     try {
-        const response = await fetch(`/api/analytics/temporadas?anio_inicio=${anioInicio}&anio_fin=${anioFin}`, {
+        const response = await fetch(`${API_BASE_URL}/analytics/temporadas?anio_inicio=${anioInicio}&anio_fin=${anioFin}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
