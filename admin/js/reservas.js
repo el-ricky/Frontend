@@ -111,22 +111,21 @@ function renderizarTabla(reservas) {
 
 async function cancelarReserva(id) {
     if (!confirm('¿Estás seguro de que deseas desactivar esta reserva?')) return;
-
     try {
         const response = await fetch(`https://backend-salones.vercel.app/api/reservas/${id}/desactivar`, {
             method: 'PATCH',
             credentials: 'include'
         });
-
+        const data = await response.json();
         if (response.ok) {
-            alert('Reserva desactivada correctamente');
+            const msgReembolso = data.reembolsoAplicado ? ` (Reembolso: ${data.reembolsoAplicado})` : "";
+            alert(`Reserva desactivada correctamente${msgReembolso}`);
             obtenerReservas(); 
         } else {
-            const data = await response.json();
-            alert(`Error: ${data.message || 'No se pudo desactivar'}`);
+            alert(`Error: ${data.error || data.msg || 'No se pudo desactivar'}`);
         }
     } catch (error) {
-        alert('Error de conexión.');
+        alert('Error de conexión con el servidor.');
     }
 }
 

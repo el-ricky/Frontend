@@ -243,17 +243,18 @@ window.cancelarReserva = async function (reservaId, btnOrigen) {
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' }
         });
+        const result = await response.json();
 
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || errorData.msg || 'Error al cancelar la reserva');
+            throw new Error(result.error || result.msg || 'Error al cancelar la reserva');
         }
-
-        // Actualizar fila: badge rojo + solo Detalles habilitado
         const fila = document.getElementById(`fila-reserva-${reservaId}`);
         if (fila) {
             const badge = fila.querySelector('.badge');
-            if (badge) { badge.className = 'badge bg-danger'; badge.textContent = 'cancelado'; }
+            if (badge) { 
+                badge.className = 'badge bg-danger'; 
+                badge.textContent = 'cancelado'; 
+            }
 
             const divAcciones = fila.querySelector('.acciones-reserva');
             if (divAcciones) {
@@ -263,8 +264,11 @@ window.cancelarReserva = async function (reservaId, btnOrigen) {
                     <button class="btn btn-custom" disabled>Cancelado</button>`;
             }
         }
-
-        mostrarMensaje('Reserva cancelada exitosamente.', 'success');
+        let mensajeFinal = `Reserva cancelada exitosamente.`;
+        if (result.reembolsoAplicado) {
+            mensajeFinal += ` Reembolso procesado: ${result.reembolsoAplicado}.`;
+        }
+        mostrarMensaje(mensajeFinal, 'success');
 
     } catch (error) {
         console.error('Error al cancelar reserva:', error);
