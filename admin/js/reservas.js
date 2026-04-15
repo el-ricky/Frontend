@@ -75,18 +75,31 @@ function renderizarTabla(reservas) {
         return;
     }
 
-    tabla.innerHTML = ''; 
+    tabla.innerHTML = '';
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
 
     reservas.forEach((reserva, index) => {
         const numeroReserva = ((paginaActual - 1) * limitePorPagina) + (index + 1);
         
-        const fechaFormateada = new Date(reserva.fecha).toLocaleDateString('es-MX', { timeZone: 'UTC' });
+        const fechaReserva = new Date(reserva.fecha);
+        const fechaFormateada = fechaReserva.toLocaleDateString('es-MX', { timeZone: 'UTC' });
 
-        const badgeClass = reserva.estado_pago === 'Pagado' ? 'bg-success' : 
-                           reserva.estado_pago === 'Pendiente' ? 'bg-warning text-dark' : 'bg-secondary';
+        const fechaComparacion = new Date(reserva.fecha);
+        fechaComparacion.setHours(0, 0, 0, 0);
+
+        const esPasada = fechaComparacion < hoy;
+        const estadoLwr = (reserva.estado_pago || '').toLowerCase();
+        const esCancelada = ['cancelada', 'cancelado', '3'].includes(estadoLwr);
+
+        const badgeClass = estadoLwr === 'pagado' ? 'bg-success' : 
+                           estadoLwr === 'pendiente' ? 'bg-warning text-dark' : 
+                           esCancelada ? 'bg-danger' : 'bg-secondary';
+
+        const botonesDeshabilitados = esPasada || esCancelada;
 
         const fila = `
-            <tr>
+            <tr style="${esPasada ? 'opacity: 0.8; background-color: #f9f9f9;' : ''}">
                 <td><strong>#${numeroReserva}</strong></td>
                 <td>${fechaFormateada}</td>
                 <td>${reserva.nombre_sala}</td>
@@ -99,8 +112,17 @@ function renderizarTabla(reservas) {
                 <td><strong>$${parseFloat(reserva.total_pagar).toLocaleString('es-MX', {minimumFractionDigits: 2})}</strong></td>
                 <td>
                     <div class="acciones-btn-group">
-                        <a href="editar_reserva.html?id=${reserva.id}" class="btn btn-custom btn-sm">Editar</a>
-                        <button class="btn btn-custom btn-sm" onclick="cancelarReserva(${reserva.id})">Cancelar</button>
+                        <a href="editar_reserva.html?id=${reserva.id}" 
+                           class="btn btn-outline-primary btn-sm ${botonesDeshabilitados ? 'disabled' : ''}" 
+                           ${botonesDeshabilitados ? 'aria-disabled="true"' : ''}>
+                           Editar
+                        </a>
+                        <button class="btn btn-outline-danger btn-sm" 
+                                onclick="cancelarReserva(${reserva.id})" 
+                                ${botonesDeshabilitados ? 'disabled' : ''}
+                                title="${esPasada ? 'No se puede cancelar una reserva pasada' : esCancelada ? 'Ya está cancelada' : ''}">
+                            ${esCancelada ? 'Cancelada' : 'Cancelar'}
+                        </button>
                     </div>
                 </td>
             </tr>
