@@ -18,13 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputDireccion = document.getElementById('inputDireccion');
     const nombreUsuario = document.getElementById('nombreUsuario');
     
-    // Verificar si hay usuario en localStorage
-    const userData = JSON.parse(localStorage.getItem('user'));
-    
-    if (!userData) {
-        window.location.href = 'login_new.html';
-        return;
-    }
+
     
     // ── Mostrar mensaje si viene de cambios.html o new_contra.html ──
     const mensajePerfil = localStorage.getItem('mensajePerfil');

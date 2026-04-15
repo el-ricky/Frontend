@@ -25,7 +25,7 @@ async function cargarPerfil() {
 
     // Protección de sesión
     if (!user) {
-        window.location.href = "login.html";
+        window.location.href = "login_new.html";
         return;
     }
 
@@ -37,7 +37,7 @@ async function cargarPerfil() {
         });
 
         if (response.status === 401) {
-            window.location.href = "login.html";
+            window.location.href = "login_new.html";
             return;
         }
 
@@ -75,7 +75,7 @@ async function guardarCambios(e) {
     e.preventDefault();
 
     if (!getUser()) {
-        window.location.href = "login.html";
+        window.location.href = "login_new.html";
         return;
     }
 
