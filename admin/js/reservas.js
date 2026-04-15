@@ -113,11 +113,11 @@ function renderizarTabla(reservas) {
                 <td>
                     <div class="acciones-btn-group">
                         <a href="editar_reserva.html?id=${reserva.id}" 
-                           class="btn btn-outline-primary btn-sm ${botonesDeshabilitados ? 'disabled' : ''}" 
+                           class="btn btn-custom" ${botonesDeshabilitados ? 'disabled' : ''}
                            ${botonesDeshabilitados ? 'aria-disabled="true"' : ''}>
                            Editar
                         </a>
-                        <button class="btn btn-outline-danger btn-sm" 
+                        <button class="btn btn-custom" 
                                 onclick="cancelarReserva(${reserva.id})" 
                                 ${botonesDeshabilitados ? 'disabled' : ''}
                                 title="${esPasada ? 'No se puede cancelar una reserva pasada' : esCancelada ? 'Ya está cancelada' : ''}">
