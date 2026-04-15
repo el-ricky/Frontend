@@ -112,9 +112,10 @@ function renderizarTabla(reservas) {
                 <td><strong>$${parseFloat(reserva.total_pagar).toLocaleString('es-MX', {minimumFractionDigits: 2})}</strong></td>
                 <td>
                     <div class="acciones-btn-group">
-                        <a href="editar_reserva.html?id=${reserva.id}" 
-                           class="btn btn-custom" ${botonesDeshabilitados ? 'disabled' : ''}
-                           ${botonesDeshabilitados ? 'aria-disabled="true"' : ''}>
+                        <a ${botonesDeshabilitados ? '' : `href="editar_reserva.html?id=${reserva.id}"`} 
+                           class="btn btn-custom ${botonesDeshabilitados ? 'disabled' : ''}" 
+                           style="${botonesDeshabilitados ? 'pointer-events: none; opacity: 0.5; filter: grayscale(1);' : ''}"
+                           aria-disabled="${botonesDeshabilitados}">
                            Editar
                         </a>
                         <button class="btn btn-custom" 
