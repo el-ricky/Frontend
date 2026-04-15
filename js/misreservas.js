@@ -157,15 +157,27 @@ function generarBotones(reserva) {
     const esCancelada = ['cancelada', 'cancelado', '3'].includes(estado);
     const esPagada    = ['pagado', 'confirmada', '1'].includes(estado);
 
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); 
+    const fechaReserva = new Date(reserva.fecha);
+    fechaReserva.setHours(0, 0, 0, 0);
+    const esFechaPasada = fechaReserva < hoy;
+
     const btnDetalles = `<a href="detallesReserva.html?id=${id}" class="btn btn-custom">Detalles</a>`;
 
-    const btnConfirmar = (!esCancelada && !esPagada)
+    const btnConfirmar = (!esCancelada && !esPagada && !esFechaPasada)
         ? `<button class="btn btn-custom" onclick="pagarReserva(${id})">Confirmar</button>`
         : `<button class="btn btn-custom" disabled>Confirmar</button>`;
 
-    const btnCancelar = esCancelada
-        ? `<button class="btn btn-custom" disabled>Cancelado</button>`
-        : `<button class="btn btn-custom" onclick="cancelarReserva(${id}, this)">Cancelar</button>`;
+    let btnCancelar = '';
+    
+    if (esCancelada) {
+        btnCancelar = `<button class="btn btn-custom" disabled>Cancelado</button>`;
+    } else if (esFechaPasada) {
+        btnCancelar = `<button class="btn btn-custom" disabled title="No se pueden cancelar eventos pasados">Finalizado</button>`;
+    } else {
+        btnCancelar = `<button class="btn btn-custom" onclick="cancelarReserva(${id}, this)">Cancelar</button>`;
+    }
 
     return `${btnDetalles} ${btnConfirmar} ${btnCancelar}`;
 }
